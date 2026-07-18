@@ -22,22 +22,23 @@ import kotlin.coroutines.startCoroutine
  * JS instead.
  */
 internal actual fun <T> runBlockingCompat(block: suspend () -> T): T {
-  var result: Result<T>? = null
+  var completed: Result<T>? = null
   block.startCoroutine(
     object : Continuation<T> {
       override val context: CoroutineContext = EmptyCoroutineContext
 
-      override fun resumeWith(outcome: Result<T>) {
-        result = outcome
+      // Parameter name must match the supertype ('result') to avoid a warning.
+      override fun resumeWith(result: Result<T>) {
+        completed = result
       }
     }
   )
-  val completed =
-    result
+  return (
+    completed
       ?: throw IllegalStateException(
         "A Strikt assertion block suspended on Kotlin/JS, where blocking is not " +
           "possible. Use only synchronous assertions in expect { } / expectCatching { } " +
           "on JS, or adopt a suspend/Promise-based API."
       )
-  return completed.getOrThrow()
+  ).getOrThrow()
 }

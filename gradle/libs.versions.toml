@@ -1,6 +1,6 @@
 [versions]
-kotlin = "2.0.21"
-kotlinx-coroutines = "1.9.0"
+kotlin = "2.4.10"
+kotlinx-coroutines = "1.11.0"
 junit = "5.11.0"
 arrow = "1.2.4"
 failgood = "0.9.1"
@@ -13,11 +13,11 @@ opentest4j = "1.3.0"
 spring-boot = "3.3.2"
 
 # Gradle plugins
-dokka = "1.9.20"
-kover = "0.8.3"
-kotlinter = "4.4.1"
+dokka = "2.2.0"
+kover = "0.9.9"
+kotlinter = "5.6.0"
 test-logger = "4.0.0"
-ben-manes-versions = "0.51.0"
+ben-manes-versions = "0.54.0"
 nexus-staging = "0.30.0"
 nebula-publishing = "21.0.0"
 
@@ -29,6 +29,7 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 
 opentest4j = { module = "org.opentest4j:opentest4j", version.ref = "opentest4j" }
 filepeek = { module = "com.christophsturm:filepeek", version.ref = "filepeek" }

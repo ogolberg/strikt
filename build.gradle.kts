@@ -3,8 +3,9 @@ import com.adarshr.gradle.testlogger.theme.ThemeType.MOCHA_PARALLEL
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.codearte.gradle.nexus.NexusStagingExtension
 import org.gradle.api.JavaVersion.VERSION_17
+import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_2
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jmailen.gradle.kotlinter.KotlinterExtension
 import kotlin.text.RegexOption.IGNORE_CASE
@@ -62,9 +63,9 @@ subprojects {
       tasks.withType<KotlinCompile> {
         compilerOptions {
           jvmTarget.set(JVM_17)
-          languageVersion.set(KOTLIN_2_0)
+          languageVersion.set(KOTLIN_2_2)
           javaParameters = true
-          freeCompilerArgs = listOf("-Xjvm-default=all")
+          jvmDefault.set(JvmDefaultMode.NO_COMPATIBILITY)
           allWarningsAsErrors = true
         }
       }
@@ -76,6 +77,9 @@ subprojects {
         "testImplementation"(platform(libs.junit.bom))
         "testImplementation"(libs.junit.jupiter.api)
         "testRuntimeOnly"(libs.junit.jupiter.engine)
+        // Gradle 9 no longer adds the JUnit Platform launcher to the test
+        // runtime classpath automatically; declare it explicitly.
+        "testRuntimeOnly"(libs.junit.platform.launcher)
       }
 
       // Test with JUnit 5
@@ -89,8 +93,8 @@ subprojects {
       // Lint Kotlin code
       apply(plugin = "org.jmailen.kotlinter")
       configure<KotlinterExtension> {
-        ignoreFailures = true
-//        indentSize = 2
+        ignoreLintFailures = true
+        ignoreFormatFailures = true
         reporters = arrayOf("html", "plain")
       }
     }

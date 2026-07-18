@@ -79,17 +79,27 @@ API on JS.
 
 ## Build/toolchain notes
 
-- Kotlin `2.0.21`, Gradle `8.13`. The project Kotlin version is kept aligned with
-  the Kotlin that Gradle's `kotlin-dsl` embeds in the buildscript classpath;
-  bumping only one causes a `kotlin-compiler-embeddable` version clash (seen as a
-  `setExtraWarnings` `NoSuchMethodError` when compiling Kotlin/JS).
+- Kotlin `2.4.10`, coroutines `1.11.0`, Gradle `9.6.1`. Language version is
+  pinned to `2.2` (`languageVersion`) for stability. Dependency and plugin
+  versions live in the `gradle/libs.versions.toml` version catalog.
 - `filepeek` reconstructs a `.kt` path from the compiled class's output dir. KMP
   emits jvm test classes to `build/classes/kotlin/jvm/test` (extra `jvm`
   segment) which filepeek 0.1.3 doesn't recognise, so `compileTestKotlinJvm`'s
   output is redirected to `build/classes/kotlin/test` and the multiplatform
   source roots are registered in `strikt/internal/FilePeek.kt`.
-- Requires a JDK the Kotlin 2.0.x compiler can parse (e.g. 17); JDK 25 is not
+- `allWarningsAsErrors` is disabled for the `*MainKotlinMetadata` compilations
+  only: with an intermediate source set (`nonJvmMain`) the Kotlin 2.4 metadata
+  compiler emits a benign duplicate-`kotlin-stdlib-common` KLIB warning that
+  would otherwise trip `-Werror`.
+- Under Gradle 9 the JUnit Platform launcher is no longer added to the test
+  runtime classpath automatically; it is declared explicitly
+  (`libs.junit.platform.launcher`).
+- Requires a JDK the Kotlin compiler can parse (e.g. 17); JDK 25 is not
   parseable by this compiler version.
-- Running native *tests* on macOS requires Xcode + command-line tools (the KGP
-  native test tasks invoke `xcrun`). Compilation/linking of `linuxX64` works
-  without it.
+- Running native *tests* on macOS requires Xcode (the KGP native test tasks
+  invoke `xcrun`); if `xcode-select -p` points at the command-line tools, pass
+  `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer`. Compilation/linking
+  of `linuxX64` works without it.
+- The `site` module (Orchid docs) is excluded from the build: the abandoned
+  Orchid Gradle plugin cannot configure under Gradle 9. It needs migrating off
+  Orchid before it can rejoin the build.
