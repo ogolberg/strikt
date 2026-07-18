@@ -13,12 +13,12 @@ dependencies {
 
   api(project(":strikt-core"))
 
-  implementation(platform("org.springframework.boot:spring-boot-dependencies:${property("versions.spring-boot")}"))
+  implementation(platform(libs.spring.boot.dependencies))
   compileOnly("org.springframework:spring-test")
   compileOnly("org.springframework:spring-web")
   compileOnly("jakarta.servlet:jakarta.servlet-api")
 
-  testImplementation("dev.minutest:minutest:${property("versions.minutest")}")
+  testImplementation(libs.minutest)
   testImplementation("org.springframework.boot:spring-boot-starter-test")
   testImplementation("org.springframework.boot:spring-boot-starter-web")
 }

@@ -14,8 +14,8 @@ description = "Extensions for testing code that uses Protobuf / gRPC."
 dependencies {
   api(project(":strikt-core"))
 
-  compileOnly("com.google.protobuf:protobuf-java:${property("versions.protobuf")}")
-  testImplementation("com.google.protobuf:protobuf-java:${property("versions.protobuf")}")
+  compileOnly(libs.protobuf.java)
+  testImplementation(libs.protobuf.java)
 }
 
 tasks.withType<DokkaTaskPartial>().configureEach {
@@ -33,7 +33,7 @@ tasks.withType<DokkaTaskPartial>().configureEach {
 
 protobuf {
   protoc {
-    artifact = "com.google.protobuf:protoc:${property("versions.protobuf")}"
+    artifact = libs.protobuf.protoc.get().let { "${it.module.group}:${it.module.name}:${it.version}" }
   }
   generateProtoTasks {
     ofSourceSet("test")

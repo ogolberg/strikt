@@ -68,7 +68,7 @@ kotlin {
     nativeMain.get().dependsOn(nonJvmMain)
 
     commonMain.dependencies {
-      implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${property("versions.kotlinx-coroutines")}")
+      implementation(libs.kotlinx.coroutines.core)
     }
 
     commonTest.dependencies {
@@ -76,16 +76,16 @@ kotlin {
     }
 
     jvmMain.dependencies {
-      api("org.opentest4j:opentest4j:${property("versions.opentest4j")}")
-      implementation("com.christophsturm:filepeek:${property("versions.filepeek")}")
+      api(libs.opentest4j)
+      implementation(libs.filepeek)
     }
 
     jvmTest.dependencies {
-      implementation(platform("org.junit:junit-bom:${property("versions.junit")}"))
-      implementation("org.junit.jupiter:junit-jupiter-api")
-      runtimeOnly("org.junit.jupiter:junit-jupiter-engine")
-      implementation("dev.failgood:failgood:${property("versions.failgood")}")
-      implementation("dev.minutest:minutest:${property("versions.minutest")}")
+      implementation(platform(libs.junit.bom.get()))
+      implementation(libs.junit.jupiter.api)
+      runtimeOnly(libs.junit.jupiter.engine)
+      implementation(libs.failgood)
+      implementation(libs.minutest)
     }
   }
 }
