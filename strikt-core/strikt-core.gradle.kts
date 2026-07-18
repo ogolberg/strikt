@@ -17,6 +17,17 @@ configure<org.jmailen.gradle.kotlinter.KotlinterExtension> {
   reporters = arrayOf("html", "plain")
 }
 
+// Pin the Java compilations (e.g. the JVM test target's `compileJvmTestJava`,
+// which builds the PersonJava fixture) to release 17 so they match Kotlin's
+// jvmTarget of 17. Without this, on a runner with a newer JDK (e.g. CI's Java
+// 20) the Java task targets that JDK's version while Kotlin targets 17, and
+// Gradle 9 / Kotlin 2.4 hard-error on the inconsistency ("Inconsistent
+// JVM-target compatibility"). Using `--release` (rather than a JVM toolchain)
+// avoids requiring a separate JDK 17 to be installed on the runner.
+tasks.withType<JavaCompile>().configureEach {
+  options.release.set(17)
+}
+
 kotlin {
   applyDefaultHierarchyTemplate()
 
