@@ -79,7 +79,7 @@ API on JS.
 
 ## Build/toolchain notes
 
-- Kotlin `2.4.10`, coroutines `1.11.0`, Gradle `9.6.1`. Language version is
+- Kotlin `2.4.21`, coroutines `1.11.0`, Gradle `9.8.1`. Language version is
   pinned to `2.2` (`languageVersion`) for stability. Dependency and plugin
   versions live in the `gradle/libs.versions.toml` version catalog.
 - `filepeek` reconstructs a `.kt` path from the compiled class's output dir. KMP

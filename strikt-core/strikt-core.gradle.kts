@@ -94,7 +94,7 @@ kotlin {
     // support (opentest4j, filepeek, JDK Formatter, full reflection); JS and
     // Native share reflection-free implementations of the same seams, so those
     // live here rather than being duplicated per platform.
-    val nonJvmMain by creating {
+    val nonJvmMain = create("nonJvmMain") {
       dependsOn(commonMain.get())
     }
     jsMain.get().dependsOn(nonJvmMain)
