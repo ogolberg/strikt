@@ -35,14 +35,6 @@ repositories {
 
 allprojects {
   group = "io.strikt"
-
-  configurations.all {
-    resolutionStrategy.eachDependency {
-      if (requested.group == "org.jetbrains.kotlin") {
-        useVersion(libs.versions.kotlin.get())
-      }
-    }
-  }
 }
 
 subprojects {

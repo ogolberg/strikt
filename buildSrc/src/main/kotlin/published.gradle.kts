@@ -53,8 +53,8 @@ publishing {
 }
 
 signing {
-  val signingKey: String? by project
-  val signingPassword: String? by project
+  val signingKey = findProperty("signingKey") as String?
+  val signingPassword = findProperty("signingPassword") as String?
   useInMemoryPgpKeys(signingKey, signingPassword)
   sign(publishing.publications["nebula"])
 }
