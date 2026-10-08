@@ -10,7 +10,7 @@ interface AtomicAssertion : Assertion {
    * @param actual an actual value, that is the value that matched
    * the expected value.
    * @param description A description of the assertion. May contain a
-   * [String.format] style placeholder for the [actual] value.
+   * `%s` (or `%d`) placeholder for the [actual] value.
    */
   fun pass(
     actual: Any?,
@@ -23,7 +23,7 @@ interface AtomicAssertion : Assertion {
    * @param actual an actual value, that is the value that differed
    * from the expected value.
    * @param description A description of the failure. May contain a
-   * [String.format] style placeholder for the [actual] value.
+   * `%s` (or `%d`) placeholder for the [actual] value.
    * @property cause The exception that caused the failure, if any.
    */
   fun fail(
