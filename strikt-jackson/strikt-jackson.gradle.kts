@@ -11,12 +11,12 @@ description = "Extensions for assertions and traversals on types Jackson's JsonN
 dependencies {
   api(project(":strikt-core"))
 
-  compileOnly(platform("com.fasterxml.jackson:jackson-bom:${property("versions.jackson")}"))
+  compileOnly(platform(libs.jackson.bom))
   compileOnly("com.fasterxml.jackson.core:jackson-databind")
 
-  testImplementation(platform("com.fasterxml.jackson:jackson-bom:${property("versions.jackson")}"))
+  testImplementation(platform(libs.jackson.bom))
   testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-  testImplementation("dev.minutest:minutest:${property("versions.minutest")}")
+  testImplementation(libs.minutest)
 }
 
 tasks.withType<DokkaTaskPartial>().configureEach {

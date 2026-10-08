@@ -117,7 +117,7 @@ internal class Homepage {
     // END homepage_eight
   }
 
-  @Suppress("ktlint:standard:no-multi-spaces")
+  @Suppress("ktlint:standard:no-multi-spaces", "REDUNDANT_CALL_OF_CONVERSION_METHOD")
   @Test
   fun `homepage nine`() {
     // START homepage_nine

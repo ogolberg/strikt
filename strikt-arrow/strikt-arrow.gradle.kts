@@ -12,10 +12,10 @@ description = "Extensions for assertions and traversals on types from the Arrow 
 dependencies {
   api(project(":strikt-core"))
 
-  compileOnly("io.arrow-kt:arrow-core:${property("versions.arrow")}")
-  testImplementation("io.arrow-kt:arrow-core:${property("versions.arrow")}")
+  compileOnly(libs.arrow.core)
+  testImplementation(libs.arrow.core)
 
-  testImplementation("dev.minutest:minutest:${property("versions.minutest")}")
+  testImplementation(libs.minutest)
 }
 
 tasks.withType<DokkaTaskPartial>().configureEach {

@@ -8,5 +8,5 @@ description = "Extensions for assertions and traversals on types from the Java s
 dependencies {
   api(project(":strikt-core"))
 
-  testImplementation("dev.minutest:minutest:${property("versions.minutest")}")
+  testImplementation(libs.minutest)
 }

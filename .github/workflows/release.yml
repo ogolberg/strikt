@@ -31,21 +31,7 @@ jobs:
           ORG_GRADLE_PROJECT_ossrhToken: ${{ secrets.OSSRH_TOKEN }}
           ORG_GRADLE_PROJECT_ossrhTokenPassword: ${{ secrets.OSSRH_TOKEN_PASSWORD }}
 
-  site:
-    name: Publish website
-    needs: release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: zulu
-          java-version: 11
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-      - name: Publish site
-        run: ./gradlew -Pversion=${GITHUB_REF:11} -Penv=prod :site:orchidDeploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+  # The `site` publish job (Orchid `:site:orchidDeploy`) has been removed: the
+  # `site` module is excluded from the build because the abandoned Orchid Gradle
+  # plugin is incompatible with Gradle 9. Restore this job once the docs site is
+  # migrated off Orchid.

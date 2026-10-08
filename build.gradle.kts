@@ -3,20 +3,26 @@ import com.adarshr.gradle.testlogger.theme.ThemeType.MOCHA_PARALLEL
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.codearte.gradle.nexus.NexusStagingExtension
 import org.gradle.api.JavaVersion.VERSION_17
+import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_2
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jmailen.gradle.kotlinter.KotlinterExtension
 import kotlin.text.RegexOption.IGNORE_CASE
 
 plugins {
-  kotlin("jvm") apply false
-  id("io.codearte.nexus-staging") version "0.30.0"
-  id("org.jmailen.kotlinter") version "4.4.1" apply false
-  id("com.adarshr.test-logger") version "4.0.0" apply false
-  id("com.github.ben-manes.versions") version "0.51.0"
+  alias(libs.plugins.kotlin.jvm) apply false
+  alias(libs.plugins.kotlin.multiplatform) apply false
+  alias(libs.plugins.kotlin.plugin.spring) apply false
+  alias(libs.plugins.nexus.staging)
+  alias(libs.plugins.kotlinter) apply false
+  alias(libs.plugins.test.logger) apply false
+  alias(libs.plugins.ben.manes.versions)
+  // dokka is brought onto the classpath by the `published` convention plugin
+  // (buildSrc), so it is applied here without a version to avoid a
+  // "plugin already on the classpath with an unknown version" clash.
   id("org.jetbrains.dokka")
-  id("org.jetbrains.kotlinx.kover") version "0.8.3"
+  alias(libs.plugins.kover)
 }
 
 repositories {
@@ -33,7 +39,7 @@ allprojects {
   configurations.all {
     resolutionStrategy.eachDependency {
       if (requested.group == "org.jetbrains.kotlin") {
-        useVersion("${property("versions.kotlin")}")
+        useVersion(libs.versions.kotlin.get())
       }
     }
   }
@@ -57,20 +63,23 @@ subprojects {
       tasks.withType<KotlinCompile> {
         compilerOptions {
           jvmTarget.set(JVM_17)
-          languageVersion.set(KOTLIN_2_0)
+          languageVersion.set(KOTLIN_2_2)
           javaParameters = true
-          freeCompilerArgs = listOf("-Xjvm-default=all")
+          jvmDefault.set(JvmDefaultMode.NO_COMPATIBILITY)
           allWarningsAsErrors = true
         }
       }
 
       dependencies {
-        "implementation"(platform("org.jetbrains.kotlin:kotlin-bom:${property("versions.kotlin")}"))
-        "implementation"(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:${property("versions.kotlinx-coroutines")}"))
+        "implementation"(platform(libs.kotlin.bom))
+        "implementation"(platform(libs.kotlinx.coroutines.bom))
 
-        "testImplementation"(platform("org.junit:junit-bom:${property("versions.junit")}"))
-        "testImplementation"("org.junit.jupiter:junit-jupiter-api")
-        "testRuntimeOnly"("org.junit.jupiter:junit-jupiter-engine")
+        "testImplementation"(platform(libs.junit.bom))
+        "testImplementation"(libs.junit.jupiter.api)
+        "testRuntimeOnly"(libs.junit.jupiter.engine)
+        // Gradle 9 no longer adds the JUnit Platform launcher to the test
+        // runtime classpath automatically; declare it explicitly.
+        "testRuntimeOnly"(libs.junit.platform.launcher)
       }
 
       // Test with JUnit 5
@@ -84,8 +93,8 @@ subprojects {
       // Lint Kotlin code
       apply(plugin = "org.jmailen.kotlinter")
       configure<KotlinterExtension> {
-        ignoreFailures = true
-//        indentSize = 2
+        ignoreLintFailures = true
+        ignoreFormatFailures = true
         reporters = arrayOf("html", "plain")
       }
     }
