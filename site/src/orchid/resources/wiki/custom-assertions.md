@@ -59,7 +59,7 @@ For assertions that perform a comparison between actual and expected values it i
 That way any assertion failure message will be more helpful.
 
 In order to do this, Strikt provides an overridden version of `fail()` that accepts a message string and the actual value found.
-The message string should contain a format placeholder for the value.
+The message string should contain a `%s` placeholder for the value.
 
 ```kotlin
 {% snippet 'custom_assertions_3' %}

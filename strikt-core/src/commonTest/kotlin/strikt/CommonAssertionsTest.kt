@@ -16,8 +16,8 @@ import kotlin.test.assertTrue
 /**
  * Platform-agnostic assertions that exercise the multiplatform `commonMain` API
  * through `kotlin.test`. These run — and pass — on every target (JVM, JS,
- * Native), exercising the `expect`/`actual` seams: failure rendering (the
- * printf-style `formatDescription`), the failure exception factories, the
+ * Native), exercising failure rendering (the `%s`/`%d` placeholder substitution
+ * in `formatDescription`), the failure exception factories, the
  * suspend `runBlockingCompat` bridge, and mapping-description derivation.
  */
 class CommonAssertionsTest {
@@ -59,6 +59,34 @@ class CommonAssertionsTest {
     expectThat(error.message)
       .isNotNull()
       .contains("has size 5")
+  }
+
+  /**
+   * A `%` in a description that is not a `%s`/`%d` placeholder is rendered
+   * verbatim. (With the former JVM `String.format` rendering this threw
+   * `UnknownFormatConversionException` while building the failure report.)
+   */
+  @Test
+  fun strayPercentInDescriptionIsHarmless() {
+    val error =
+      assertFailsWith<AssertionError> {
+        expectThat("partial").describedAs("has 100% coverage").isEqualTo("full")
+      }
+    expectThat(error.message)
+      .isNotNull()
+      .contains("has 100% coverage")
+  }
+
+  /** `%%` in a description renders as a literal `%`. */
+  @Test
+  fun escapedPercentRendersLiterally() {
+    val error =
+      assertFailsWith<AssertionError> {
+        expectThat(0.99).describedAs("coverage of 99%% (%s)").isEqualTo(1.0)
+      }
+    expectThat(error.message)
+      .isNotNull()
+      .contains("coverage of 99% (0.99)")
   }
 
   /** Exercises the suspend `runBlockingCompat` bridge via `expectCatching`. */

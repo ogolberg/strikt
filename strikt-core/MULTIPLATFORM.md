@@ -3,7 +3,7 @@
 `strikt-core` is a Kotlin Multiplatform (KMP) module. The assertion API and all
 assertion logic live in `commonMain` and compile for every target; the small set
 of things that genuinely need a platform (exception types, source-aware lambda
-descriptions, `printf`-style formatting, `runBlocking`, and a little reflection)
+descriptions, `runBlocking`, and a little reflection)
 are isolated behind `expect`/`actual` declarations and **fully implemented on
 every target**.
 
@@ -47,7 +47,6 @@ behaviour exactly; the non-JVM `actual`s are real implementations.
 | Concern | `expect` (commonMain) | JVM `actual` | Non-JVM `actual` |
 | --- | --- | --- | --- |
 | Failure exceptions | `strikt/internal/Failures.kt` | wraps `org.opentest4j` + trims Strikt frames from the stack trace | `AssertionError` subclasses (`strikt.internal.opentest4j.*` in `nonJvmMain`) carrying the same expected/actual metadata; no stack-trace trimming (not portable) |
-| `String.format` rendering | `strikt/internal/reporting/Platform.kt` (`formatDescription`) | JDK `Formatter` via `String.format` | hand-written positional `printf` in `nonJvmMain` (`%s`, `%d`, `%x`/`%o`/`%b`/`%c`/`%f`, flags, width, precision, `%%`) |
 | Line separator | `Platform.kt` (`EOL`) | `System.getProperty("line.separator")` | `"\n"` |
 | Value formatting reflection | `Formatting.kt` (`formatOther`, `simpleTypeName`, `qualifiedTypeName`, `preferToString`) | `java.lang.Class` / `KClass.java` / `CallableReference` reflection | `KClass.simpleName` (shared); `qualifiedTypeName` uses `KClass.qualifiedName` on Native and `simpleName` on JS (JS has no `qualifiedName`); `preferToString` = `false` |
 | Lambda mapping descriptions | `strikt/api/Assertion.kt` (`describe`) | callable-reference reflection + `filepeek` source decompilation | callable references described via `KProperty`/`KFunction` reflection; plain lambdas fall back to `"%s"` (no filepeek off-JVM — same as the JVM when its source lookup fails) |
@@ -64,6 +63,14 @@ than returning a wrong result; such callers would need a `suspend`/`Promise`-bas
 API on JS.
 
 ## Common-code changes made for portability
+
+- Description templates are rendered by a small common `%s`/`%d` substitution
+  (`formatDescription` in `strikt/internal/reporting/Platform.kt`) on every
+  platform, replacing the JVM's `String.format` (and a hand-written non-JVM
+  `printf`). `%%` renders a literal `%`; any other `%` sequence is emitted
+  verbatim, so a stray `%` in a user description no longer throws
+  `UnknownFormatConversionException` on the JVM. The documented API contract
+  (a placeholder for the expected/actual value) is unchanged.
 
 - `List.containsSequence` uses a small multiplatform `indexOfSubList` instead of
   `java.util.Collections.indexOfSubList`.
