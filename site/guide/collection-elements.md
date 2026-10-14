@@ -1,20 +1,13 @@
----
----
-
 # Assertions on elements of a collection
 
 Some assertions on collections include sub-assertions applied to the elements of the collection.
 For example, we can assert that _all_ elements conform to a repeated assertion.
 
-```kotlin
-{% snippet 'collections_2' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/Assertions.kt#collections_2
 
 This produces the output:
 
-```text
-{% snippet 'collections_1' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/Assertions.kt#collections_1{text}
 
 The results are broken down by individual elements in the collection, so it's easy to see which failed.
 
