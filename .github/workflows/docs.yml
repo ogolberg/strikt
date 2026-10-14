@@ -1,0 +1,74 @@
+name: Docs
+
+# Builds and deploys the documentation site (https://strikt.io/):
+# - the VitePress site in `site/`
+# - the aggregated Dokka API docs under /api/
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: 17
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Generate API docs
+        # The dummy ossrh properties satisfy the `published` convention plugin,
+        # which resolves them eagerly at configuration time.
+        run: ./gradlew :dokkaGenerate -PossrhToken=x -PossrhTokenPassword=x
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Install site dependencies
+        run: npm ci
+        working-directory: site
+      - name: Build site
+        run: npm run build
+        working-directory: site
+        env:
+          # On a release, the site version comes from the release tag (e.g.
+          # v1.2.3); otherwise it is derived from CHANGELOG.md.
+          STRIKT_VERSION: ${{ github.event.release.tag_name || '' }}
+      - name: Add API docs to site
+        run: cp -r build/dokka/html site/.vitepress/dist/api
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/.vitepress/dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

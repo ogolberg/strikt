@@ -1,13 +1,8 @@
----
----
-
 # Traversing Assertion Subjects
 
 Although you can obviously write assertions for the properties of an object with code like this:
 
-```kotlin
-{% snippet 'traversing_subjects_1'%}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/Chaining.kt#traversing_subjects_1
 
 Sometimes it's useful to be able to transform an assertion on a subject to an assertion on a property of that subject, or the result of a method call.
 Particularly when using soft assertion blocks.
@@ -21,24 +16,18 @@ The `get` method returns an `Assertion.Builder<R>` where the new subject (whose 
 
 This is useful for making assertions about the properties of an object, or the values returned by methods, particularly if you want to use a block-style assertion to validate multiple object properties.
 
-```kotlin
-{% snippet'traversing_subjects_4' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/Chaining.kt#traversing_subjects_4
 
 ## Using _get_ with lambdas
 
 An alternate version of the `get` method takes a lambda whose receiver is the current subject.
 
-```kotlin
-{% snippet 'traversing_subjects_2' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/Chaining.kt#traversing_subjects_2
 
 Strikt will attempt to read the test source to find out the name of the variables.
 This example produces output that looks like this:
 
-```kotlin
-{% snippet 'traversing_subjects_3' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/Chaining.kt#traversing_subjects_3{text}
 
 ### Performance considerations
 
@@ -56,9 +45,7 @@ In either of those cases Strikt will _not_ derive a description by attempting to
 If the assertion subject is an `Iterable` Strikt provides a `map` function much like the one in the Kotlin standard library.
 It is effectively like using `get` on each element of the `Iterable` subject.
 
-```kotlin
-{% snippet 'traversing_subjects_5' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/Chaining.kt#traversing_subjects_5
 
 In this case the `map` function is transforming the `Assertion.Buidler<List<Person>>` into an `Assertion.Builder<List<String>>` by applying the `name` property to each element.
 
@@ -68,17 +55,13 @@ If you find yourself frequently using `get` for the same properties or methods, 
 
 For example:
 
-```kotlin
-{% snippet 'traversing_subjects_6' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/Chaining.kt#traversing_subjects_6
 
 You can then write the earlier example as:
 
-```kotlin
-{% snippet 'traversing_subjects_7' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/Chaining.kt#traversing_subjects_7
 
 ## Built-in traversals
 
 Strikt has a number of built in traversal properties and functions such as `Assertion.Builder<List<E>>.first()` which returns an `Assertion.Builder<E>` whose subject is the first element of the list.
-See the {{ anchor('API docs', 'strikt.assertions') }} for details.
+See the [API docs](/api/) for details.

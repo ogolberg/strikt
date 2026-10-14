@@ -1,6 +1,3 @@
----
----
-
 # Custom Assertions
 
 One of the aims of Strikt is that implementing your own assertions is _really, really_ easy.
@@ -30,9 +27,7 @@ The standard assertions `isNull`, `isEqualTo`, `isA<T>` and many others are simp
 
 Let's imagine we're implementing an assertion function for `java.time.LocalDate` that tests if the represented date is a leap day.
 
-```kotlin
-{% snippet 'custom_assertions_1' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/CustomAssertions.kt#custom_assertions_1
 
 Breaking this down:
 
@@ -43,9 +38,7 @@ Breaking this down:
 
 If this assertion fails it will produce a message like:
 
-```text
-{% snippet 'custom_assertions_2' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/CustomAssertions.kt#custom_assertions_2{text}
 
 ### Note
 
@@ -61,15 +54,11 @@ That way any assertion failure message will be more helpful.
 In order to do this, Strikt provides an overridden version of `fail()` that accepts a message string and the actual value found.
 The message string should contain a `%s` placeholder for the value.
 
-```kotlin
-{% snippet 'custom_assertions_3' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/CustomAssertions.kt#custom_assertions_3
 
 Now if the assertion fails there is a little more detail.
 
-```text
-{% snippet 'custom_assertions_4' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/CustomAssertions.kt#custom_assertions_4{text}
 
 In this case that's not terribly helpful but when dealing with properties, method return values, or the like it can save a lot of effort in identifying the precise cause of an error.
 When comparing large string values it also means IDEs such as IntelliJ IDEA will present a detailed diff dialog in the event of a test failure.
@@ -80,9 +69,7 @@ For the simplest assertion functions, instead of using `assert` and calling `pas
 
 We can re-implement the example above like this:
 
-```kotlin
-{% snippet 'custom_assertions_5' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/CustomAssertions.kt#custom_assertions_5
 
 You should not use this form when you want to provide a meaningful description of the actual value but for simple assertions it's slightly less verbose.
 
@@ -98,9 +85,7 @@ Composed assertions are useful for things like:
 
 Imagine we're creating an assertion function that tests fails if any element of a collection is `null`.
 
-```kotlin
-{% snippet 'custom_assertions_6' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/CustomAssertions.kt#custom_assertions_6
 
 Breaking this down:
 
@@ -113,9 +98,7 @@ The receiver of the block passed to `result` has the properties `allFailed`, `an
 
 If the assertion failed we'll see something like this:
 
-```text
-{% snippet 'custom_assertions_7' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/CustomAssertions.kt#custom_assertions_7{text}
 
 As well as the overall assertion failure message we get a detailed breakdown allowing us to easily find exactly where the problem is.
 

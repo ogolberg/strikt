@@ -3,10 +3,10 @@ rootProject.name = "strikt"
 include(
   "strikt-bom",
   "strikt-core",
-  // "site" is intentionally excluded: it uses the abandoned Orchid Gradle
-  // plugin (0.21.1), which cannot configure under Gradle 9 (it sets a removed
-  // task property and fails the whole build). The docs site needs to be
-  // migrated off Orchid before it can be part of a Gradle 9 build again.
+  // The docs site is not a Gradle module: it lives in `site/` as a standalone
+  // VitePress (npm) project and is built and deployed by the docs workflow
+  // (.github/workflows/docs.yml), which also publishes the aggregated Dokka
+  // API docs (`./gradlew :dokkaGenerate`) under /api/.
   "strikt-arrow",
   "strikt-jackson",
   "strikt-jvm",
