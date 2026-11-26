@@ -65,7 +65,7 @@ dependencies {
 
 ## Using Strikt
 
-Please see the [project documentation](https://strikt.io/) and [API docs](https://strikt.io/modules/core/).
+Please see the [project documentation](https://strikt.io/) and [API docs](https://strikt.io/api/).
 
 ## Community
 

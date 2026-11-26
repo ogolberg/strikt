@@ -31,7 +31,5 @@ jobs:
           ORG_GRADLE_PROJECT_ossrhToken: ${{ secrets.OSSRH_TOKEN }}
           ORG_GRADLE_PROJECT_ossrhTokenPassword: ${{ secrets.OSSRH_TOKEN_PASSWORD }}
 
-  # The `site` publish job (Orchid `:site:orchidDeploy`) has been removed: the
-  # `site` module is excluded from the build because the abandoned Orchid Gradle
-  # plugin is incompatible with Gradle 9. Restore this job once the docs site is
-  # migrated off Orchid.
+  # The docs site (VitePress + Dokka) is built and deployed to GitHub Pages by
+  # the docs workflow (docs.yml), which also runs on published releases.

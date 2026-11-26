@@ -1,6 +1,3 @@
----
----
-
 # Getting Started
 
 Strikt does not depend on any particular test runner.
@@ -11,13 +8,18 @@ It can be used with JUnit, Spek or any other runner that supports tests written 
 Strikt is available from Maven Central.
 Add the following to your `build.gradle` or `build.gradle.kts`.
 
-```kotlin
+<script setup>
+import { useData } from 'vitepress'
+const { theme } = useData()
+</script>
+
+```kotlin-vue
 repositories {
   mavenCentral()
 }
 
 dependencies {
-  testImplementation("io.strikt:strikt-core:{{ site.version }}")
+  testImplementation("io.strikt:strikt-core:{{ theme.striktVersion }}")
 }
 ```
 

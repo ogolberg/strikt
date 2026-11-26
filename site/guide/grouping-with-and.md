@@ -1,6 +1,3 @@
----
----
-
 # Grouping Assertions with _and_ or _with_
 
 Strikt provides the `and` and `with` functions, and several varieties of `with*`, that are used to add a block of assertions to a chain.
@@ -16,9 +13,7 @@ The same is true when the subject type is overly broad, and you need to narrow t
 The `and` method is helpful in these scenarios.
 For example:
 
-```kotlin
-{% snippet 'grouping_with_and_1' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/Chaining.kt#grouping_with_and_1
 
 The type after `expectThat` is `Assertion.Builder<T?>` (assuming `subject` has a nullable declared type) but the receiver of `and` is `Assertion.Builder<T>` as `isNotNull` has narrowed the subject type.
 
@@ -27,28 +22,20 @@ The type after `expectThat` is `Assertion.Builder<T?>` (assuming `subject` has a
 Another use for `and` is to create a branch of assertions that apply to a sub-tree of the subject.
 For example, if testing a complex value type with nested properties:
 
-```kotlin
-{% snippet 'grouping_with_and_2' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/Chaining.kt#grouping_with_and_2
 
 The `with` function gives you another option for doing this:
 
-```kotlin
-{% snippet 'grouping_with_with_1' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/Chaining.kt#grouping_with_with_1
 
 Of course, it may be better to structure the same assertion with separate assertions.
 This is a lot more readable:
 
-```kotlin
-{% snippet 'grouping_with_and_3' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/Chaining.kt#grouping_with_and_3
 
 Testing properties of a collection can be done similarly:
 
-```kotlin
-{% snippet 'grouping_with_and_4' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/Chaining.kt#grouping_with_and_4
 
 ## _with*_ extension functions
 
@@ -67,6 +54,4 @@ These include:
 
 For example, the previous assertions could also be written as:
 
-```kotlin
-{% snippet 'grouping_with_with_2' %}
-```
+<<< ../../strikt-core/src/jvmTest/kotlin/strikt/docs/Chaining.kt#grouping_with_with_2

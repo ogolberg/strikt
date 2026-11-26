@@ -37,6 +37,24 @@ allprojects {
   group = "io.strikt"
 }
 
+// Aggregate the API docs of all published modules into a single Dokka site
+// (`./gradlew :dokkaGenerate`, output in build/dokka/html). The docs workflow
+// deploys it to https://strikt.io/api/. strikt-bom is omitted: it has no
+// sources.
+dependencies {
+  dokka(project(":strikt-core"))
+  dokka(project(":strikt-arrow"))
+  dokka(project(":strikt-jackson"))
+  dokka(project(":strikt-jvm"))
+  dokka(project(":strikt-mockk"))
+  dokka(project(":strikt-protobuf"))
+  dokka(project(":strikt-spring"))
+}
+
+dokka {
+  moduleName.set("Strikt")
+}
+
 subprojects {
   repositories {
     mavenCentral()

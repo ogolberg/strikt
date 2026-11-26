@@ -4,6 +4,11 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_2
 plugins {
   kotlin("multiplatform")
   id("org.jmailen.kotlinter")
+  // Include this module in the aggregated API docs (`dokkaHtmlMultiModule` at
+  // the root, published to strikt.io/api/). The other modules get dokka via
+  // the `published` convention plugin, which this multiplatform module does
+  // not apply.
+  id("org.jetbrains.dokka")
 }
 
 description = "The core API for Strikt."
